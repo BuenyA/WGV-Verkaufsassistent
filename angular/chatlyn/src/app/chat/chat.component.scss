@@ -1,0 +1,67 @@
+.chat {
+    height: 74vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow: hidden;
+
+    .chatbox {
+        width: 60vw;
+        height: 60vh;
+        padding-top: 2vh;
+        margin-top: 1.5em;
+        border-radius: 15px;
+        box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.1);
+
+        .chatarea {
+            height: 54vh;
+            overflow-y: auto;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        .inputarea {
+            background-color: #f8f9fa;
+            height: 6vh;
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            border-radius: 0 0 15px 15px;
+
+            .inputbox {
+                width: 57vw;
+                height: 6vh;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                input {
+                    height: 5vh;
+                    width: 55.5vw;
+                    background-color: transparent;
+                    border: 0px solid;
+                    font-size: 1.2em;
+                }
+
+                input:focus {
+                    outline: none;
+                }
+            }
+
+            .sendarea {
+                width: 3vw;
+                height: 6vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                cursor: pointer;
+
+                img {
+                    width: 23px;
+                    height: auto;
+                }
+            }
+        }
+    }
+}
+

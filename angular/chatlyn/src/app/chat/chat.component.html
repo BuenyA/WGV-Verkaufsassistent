@@ -1,0 +1,18 @@
+<div class="chat">
+    <div class="chatbox">
+        <div class="chatarea" #chatArea>
+            <app-message [message]="defaultMessage1" [BoU]="true"></app-message>
+            <app-message [message]="defaultMessage2" [BoU]="true"></app-message>
+            <div #containerRef></div>
+        </div>
+        <div class="inputarea">
+            <div class="inputbox">
+                <input type="text" placeholder="Stellen Sie eine Frage ..." #inputMessage (keyup.enter)="sendMessage(inputMessage)">
+            </div>
+            <!-- <div class="sendarea" (click)="sendMessage(inputMessage)"> -->
+            <div class="sendarea" (click)="sendMessage(inputMessage)">
+                <img src="/assets/images/icons/send.png" alt="Das Logo konnte nicht geladen werden!">
+            </div>
+        </div>
+    </div>
+</div>
