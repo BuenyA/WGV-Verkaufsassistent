@@ -1,6 +1,6 @@
 import { Component, ComponentRef, ElementRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { MessageComponent } from './message/message.component';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 
 @Component({
@@ -10,7 +10,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ChatComponent {
 
-  defaultMessage1: string = "Hallo! Ich bin Ihr persönlicher Beratungsassistent!";
+  defaultMessage1: string = "Hallo! Ich bin ChatLYN. Ihr persönlicher Verkaufsassistent!";
   defaultMessage2: string = "Wie kann ich Ihnen heute weiterhelfen?";
 
   constructor(public http: HttpClient) {}
@@ -32,17 +32,16 @@ export class ChatComponent {
   }
 
   getBotMessage(message: string) {
-    const headers = { 'content-type': 'application/json' }
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
         const json = {
             "userMessage": "" + message + "",
         };
         const body = JSON.stringify(json);
-        console.log("JSON strngify body = " + body)
-
+        console.log("JSON stringify body = " + body)
+    
     this.http.post<any>('http://localhost:8080/api/v1/getBotMessage', body, { headers: headers, withCredentials: true }).subscribe({
       next: (data) => {
         console.log(data);
-        // this.setBotMessage(data['botMessage']);
         setTimeout(() => this.setBotMessage(data['botMessage']), 1500);
       },
       error: (error) => {

@@ -1,12 +1,12 @@
 'use strict';
 
+// Import Libraries
 const express = require('express');
-
-// CORS handling package, to allow http requests for the client
 const cors = require('cors');
-
-// Database MariaDB
 const mysql = require('mysql');
+
+// Import Subprocesses
+const utils = require("./utils/utils")
 
 // Database connection info (MariaDB) - used from environment variables
 var dbInfo = {
@@ -56,7 +56,13 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.post('/api/v1/getBotMessage', (req, res) => {
+    
+    console.log(req.body);
+
     var userMessage = req.body.userMessage;
+
+    
+    
     // connection.query("SELECT AKTIE_NAME FROM `AKTIE` WHERE AKTIE_TICKERSYMBOL = '" + req.params.stockSymbol + "'", function (error, results, fields) {
     //     if (error) {
     //         console.error(error);
