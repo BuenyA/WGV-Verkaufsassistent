@@ -6,6 +6,21 @@ import { Component, Input, Output } from '@angular/core';
   styleUrl: './message.component.scss'
 })
 export class MessageComponent {
-  @Input() message: string;
   @Input() BoU: boolean; // Bot = True, User = False
+  @Input() messageArray: string[];
+
+  message: string = '';
+  currentWordIndex: number = 0;
+
+  ngOnInit() {
+    this.streamMessage();
+  }
+
+  streamMessage() {
+    if (this.currentWordIndex < this.messageArray.length) {
+      this.message += '' + this.messageArray[this.currentWordIndex];
+      this.currentWordIndex++;
+      setTimeout(() => this.streamMessage(), 50);
+    }
+  }
 }

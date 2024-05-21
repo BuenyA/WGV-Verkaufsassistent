@@ -8,7 +8,7 @@ const mysql = require('mysql');
 // Import Subprocesses
 const utils = require("./utils/utils.js")
 // const openai = require("./neuronal_network/openai.js")
-const openai = require("./neuronal_network/openaiAssistant2.js")
+const openai = require("./neuronal_network/openaiAssistant.js")
 
 // Database connection info (MariaDB) - used from environment variables
 var dbInfo = {

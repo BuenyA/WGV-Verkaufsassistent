@@ -1,8 +1,8 @@
 <div class="chat">
     <div class="chatbox">
         <div class="chatarea" #chatArea>
-            <app-message [message]="defaultMessage1" [BoU]="true"></app-message>
-            <app-message [message]="defaultMessage2" [BoU]="true"></app-message>
+            <app-message [messageArray]="defaultMessage1" [BoU]="true"></app-message>
+            <app-message [messageArray]="defaultMessage2" [BoU]="true"></app-message>
             <div #containerRef></div>
         </div>
         <div class="inputarea">
@@ -16,10 +16,10 @@
     </div>
     <div class="chatButtons">
         <div class="buttondiv">
-            <button mat-flat-button color="Disabled" (click)="newThread()">Neuer Chat</button>
+            <button class="newChatButton" mat-flat-button color="Disabled" (click)="newThread()">Neuer Chat</button>
         </div>
         <div class="buttondiv">
-            <button mat-flat-button color="Disabled" [disabled]="buttonDisabled">Visueller Chatbot (Beta)</button>
+            <button class="secretButton" mat-flat-button color="Disabled" [disabled]="buttonDisabled">Visueller Chatbot (Beta)</button>
         </div>
     </div>
 </div>

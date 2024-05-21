@@ -10,8 +10,8 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class ChatComponent {
 
-  defaultMessage1: string = "Hallo! Ich bin Ihr persönlicher Verkaufsassistent!";
-  defaultMessage2: string = "Wie kann ich Ihnen heute weiterhelfen?";
+  defaultMessage1: string[] = ["Hallo! Ich bin Ihr persönlicher Verkaufsassistent!"];
+  defaultMessage2: string[] = ["Wie kann ich Ihnen heute weiterhelfen?"];
   buttonDisabled: boolean = true;
 
   constructor(public http: HttpClient) {}
@@ -25,7 +25,7 @@ export class ChatComponent {
     const message = inputElement.value;
     if (message.trim()) {
       this.componentRef = this.container.createComponent(MessageComponent);
-      this.componentRef.instance.message = message;
+      this.componentRef.instance.messageArray = [message];
       inputElement.value = '';
       this.scrollToBottom();
       if(message == "Code: 300") {
@@ -49,6 +49,7 @@ export class ChatComponent {
     this.http.post<any>('http://localhost:8080/api/v1/getBotMessage', body, { headers: headers, withCredentials: true }).subscribe({
       next: (data) => {
         console.log(data);
+        console.log(data['botMessage']);
         this.setBotMessage(data['botMessage']);
       },
       error: (error) => {
@@ -56,10 +57,11 @@ export class ChatComponent {
       }
     });
   }
-
-  setBotMessage(dynamicBotMessage: string) {
+  
+  setBotMessage(dynamicBotMessage: any) {
     this.componentRef = this.container.createComponent(MessageComponent);
-    this.componentRef.instance.message = dynamicBotMessage;
+    // this.componentRef.instance.message = dynamicBotMessage;
+    this.componentRef.instance.messageArray = dynamicBotMessage;
     this.componentRef.instance.BoU = true;
     this.scrollToBottom();
   }

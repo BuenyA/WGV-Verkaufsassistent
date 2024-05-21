@@ -78,13 +78,22 @@
             justify-content: center;
 
             button {
-                background-color: #008F94;
                 color: white;
+            }
+
+            .newChatButton {
+                background-color: #008F94;
+            }
+
+            .secretButton {
+                background-color: #007bff;
 
                 &:disabled {
                     background-color: #d3d3d3;
                 }
             }
+
+            
         }
     }
 }

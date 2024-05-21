@@ -33,9 +33,10 @@
         .message {
             display: flex;
             align-items: center;
-            min-height: 6vh;
+            min-height: 5vh;
             max-width: 30vw;
-            padding: 11px 1em 0 1em;
+            // padding: 11px 1em 0 1em;
+            padding: 1.6vh 1em 0.5vh 1em;
             background-color: #f8f9fa;
             border-radius: 10px;
             font-size: 1.2em;
@@ -62,9 +63,9 @@
         .message {
             display: flex;
             align-items: center;
-            min-height: 6vh;
+            min-height: 5vh;
             max-width: 30vw;
-            padding: 11px 1em 0 1em;
+            padding: 1.6vh 1em 0.5vh 1em;
             background-color: #007bff;
             color: white;
             border-radius: 10px;
