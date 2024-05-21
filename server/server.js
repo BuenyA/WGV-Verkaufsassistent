@@ -7,8 +7,8 @@ const mysql = require('mysql');
 
 // Import Subprocesses
 const utils = require("./utils/utils.js")
-const openai = require("./neuronal_network/openai.js")
-// const openai = require("./neuronal_network/openaiAssistant2.js")
+// const openai = require("./neuronal_network/openai.js")
+const openai = require("./neuronal_network/openaiAssistant2.js")
 
 // Database connection info (MariaDB) - used from environment variables
 var dbInfo = {
@@ -22,17 +22,14 @@ var dbInfo = {
 var connection = mysql.createPool(dbInfo);
 console.log("Conecting to database...");
 
-// Check the connection   // 
+// Check the DB-Connection // 
 connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
-    if (error) throw error; // <- this will throw the error and exit normally
-    // check the solution - should be 2
+    if (error) throw error;
     if (results[0].solution == 2) {
-        // everything is fine with the database
         console.log("Database connected and works");
     } else {
-        // connection is not fine - please check
         console.error("There is something wrong with your database connection! Please check");
-        process.exit(5); // <- exit application with error code e.g. 5
+        process.exit(5)
     }
 });
 
@@ -59,19 +56,17 @@ app.use(cors(corsOptions));
 
 app.post('/api/v1/getBotMessage', async (req, res) => {
     try {
-        console.log(req.body);
-
         var userMessage = req.body.userMessage;
-
+        console.log(userMessage);
         var gptAnswer = await openai.requestGPT(userMessage);
 
-        // console.log(gptAnswer);
+        console.log(gptAnswer);
 
         // console.log(gptAnswer.message);
         // console.log(gptAnswer.message.content);
 
-        res.status(200).json({ botMessage: gptAnswer.message.content });
         // res.status(200).json({ botMessage: "gptAnswer.message.content" });
+        res.status(200).json({ botMessage: gptAnswer });
     } catch (error) {
         console.error("Error in processing request: ", error);
         res.status(500).json({ error: 'Something went wrong' });
