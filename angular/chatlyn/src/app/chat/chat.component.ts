@@ -12,6 +12,7 @@ export class ChatComponent {
 
   defaultMessage1: string = "Hallo! Ich bin ChatLYN. Ihr persönlicher Verkaufsassistent!";
   defaultMessage2: string = "Wie kann ich Ihnen heute weiterhelfen?";
+  buttonDisabled: boolean = true;
 
   constructor(public http: HttpClient) {}
 
@@ -27,7 +28,13 @@ export class ChatComponent {
       this.componentRef.instance.message = message;
       inputElement.value = '';
       this.scrollToBottom();
-      this.getBotMessage(message);
+      if(message == "Unlock Button (Code: 300)") {
+        setTimeout(() => this.unlockButton(), 1000);
+      } else if (message == "Lock Button (Code: 301)") {
+        setTimeout(() => this.lockButton(), 1000);
+      } else {
+        this.getBotMessage(message);
+      }
     }
   }
 
@@ -42,12 +49,22 @@ export class ChatComponent {
     this.http.post<any>('http://localhost:8080/api/v1/getBotMessage', body, { headers: headers, withCredentials: true }).subscribe({
       next: (data) => {
         console.log(data);
-        setTimeout(() => this.setBotMessage(data['botMessage']), 1500);
+        this.setBotMessage(data['botMessage']);
       },
       error: (error) => {
         console.error('Error:', error);
       }
     });
+  }
+
+  unlockButton() {
+    this.buttonDisabled = false;
+    this.setBotMessage("Button unlocked!");
+  }
+
+  lockButton() {
+    this.buttonDisabled = true;
+    this.setBotMessage("Button locked!");
   }
 
   setBotMessage(dynamicBotMessage: string) {

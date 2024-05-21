@@ -6,7 +6,9 @@ const cors = require('cors');
 const mysql = require('mysql');
 
 // Import Subprocesses
-const utils = require("./utils/utils")
+const utils = require("./utils/utils.js")
+const openai = require("./neuronal_network/openai.js")
+// const openai = require("./neuronal_network/openaiAssistant2.js")
 
 // Database connection info (MariaDB) - used from environment variables
 var dbInfo = {
@@ -55,24 +57,25 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-app.post('/api/v1/getBotMessage', (req, res) => {
-    
-    console.log(req.body);
+app.post('/api/v1/getBotMessage', async (req, res) => {
+    try {
+        console.log(req.body);
 
-    var userMessage = req.body.userMessage;
+        var userMessage = req.body.userMessage;
 
-    
-    
-    // connection.query("SELECT AKTIE_NAME FROM `AKTIE` WHERE AKTIE_TICKERSYMBOL = '" + req.params.stockSymbol + "'", function (error, results, fields) {
-    //     if (error) {
-    //         console.error(error);
-    //         res.status(500).json(error);
-    //     } else {
-    //         console.log('Success answer from DB: ', results);
-    //         res.status(200).json(results);
-    //     }
-    // });
-    res.status(200).json({ botMessage: "Was diese: " + userMessage + "?" });
+        var gptAnswer = await openai.requestGPT(userMessage);
+
+        // console.log(gptAnswer);
+
+        // console.log(gptAnswer.message);
+        // console.log(gptAnswer.message.content);
+
+        res.status(200).json({ botMessage: gptAnswer.message.content });
+        // res.status(200).json({ botMessage: "gptAnswer.message.content" });
+    } catch (error) {
+        console.error("Error in processing request: ", error);
+        res.status(500).json({ error: 'Something went wrong' });
+    }
 });
 
 // Start the actual server
