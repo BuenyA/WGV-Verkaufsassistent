@@ -57,20 +57,40 @@ app.use(cors(corsOptions));
 app.post('/api/v1/getBotMessage', async (req, res) => {
     try {
         var userMessage = req.body.userMessage;
-        console.log(userMessage);
-        var gptAnswer = await openai.requestGPT(userMessage);
+        var threadResults;
 
+        console.log("user > " + userMessage);
+
+        threadResults = await new Promise((resolve, reject) => {
+            connection.query("SELECT * FROM `THREADS` ORDER BY timestamp DESC LIMIT 1", function (error, results, fields) {
+                if (error) {
+                    return reject(error);
+                }
+                resolve(results);
+            });
+        });
+
+        var gptAnswer = await openai.requestGPT(userMessage, threadResults[0]['THREAD_ID']);
+        
         console.log(gptAnswer);
 
-        // console.log(gptAnswer.message);
-        // console.log(gptAnswer.message.content);
-
-        // res.status(200).json({ botMessage: "gptAnswer.message.content" });
         res.status(200).json({ botMessage: gptAnswer });
     } catch (error) {
         console.error("Error in processing request: ", error);
         res.status(500).json({ error: 'Something went wrong' });
     }
+});
+
+app.get('/api/v1/createNewThread', async (req, res) => {
+    connection.query("INSERT INTO `THREADS` (`THREAD_ID`, `USER`, `TIMESTAMP`) VALUES ('" + await openai.createThread() + "','user', current_timestamp())", function (error, res_buchung, fields) {
+        if (error) {
+            console.error(error);
+            res.status(500).json({ newThreat: false });
+        }
+        else {
+            res.status(200).json({ newThreat: true });
+        }
+    })
 });
 
 // Start the actual server

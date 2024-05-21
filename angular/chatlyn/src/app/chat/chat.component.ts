@@ -10,7 +10,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class ChatComponent {
 
-  defaultMessage1: string = "Hallo! Ich bin ChatLYN. Ihr persönlicher Verkaufsassistent!";
+  defaultMessage1: string = "Hallo! Ich bin Ihr persönlicher Verkaufsassistent!";
   defaultMessage2: string = "Wie kann ich Ihnen heute weiterhelfen?";
   buttonDisabled: boolean = true;
 
@@ -28,9 +28,9 @@ export class ChatComponent {
       this.componentRef.instance.message = message;
       inputElement.value = '';
       this.scrollToBottom();
-      if(message == "Unlock Button (Code: 300)") {
+      if(message == "Code: 300") {
         setTimeout(() => this.unlockButton(), 1000);
-      } else if (message == "Lock Button (Code: 301)") {
+      } else if (message == "Code: 301") {
         setTimeout(() => this.lockButton(), 1000);
       } else {
         this.getBotMessage(message);
@@ -57,16 +57,6 @@ export class ChatComponent {
     });
   }
 
-  unlockButton() {
-    this.buttonDisabled = false;
-    this.setBotMessage("Button unlocked!");
-  }
-
-  lockButton() {
-    this.buttonDisabled = true;
-    this.setBotMessage("Button locked!");
-  }
-
   setBotMessage(dynamicBotMessage: string) {
     this.componentRef = this.container.createComponent(MessageComponent);
     this.componentRef.instance.message = dynamicBotMessage;
@@ -77,5 +67,22 @@ export class ChatComponent {
   scrollToBottom() {
     const element = this.chatArea.nativeElement;
     setTimeout(() => element.scrollTop = element.scrollHeight, 100);
+  }
+
+  newThread() {
+    this.http.get<any[]>('http://localhost:8080/api/v1/createNewThread', { withCredentials: true }).subscribe(data => {
+      console.log(data)
+    })
+    window.location.reload();
+  }
+
+  unlockButton() {
+    this.buttonDisabled = false;
+    this.setBotMessage("Button unlocked!");
+  }
+
+  lockButton() {
+    this.buttonDisabled = true;
+    this.setBotMessage("Button locked!");
   }
 }

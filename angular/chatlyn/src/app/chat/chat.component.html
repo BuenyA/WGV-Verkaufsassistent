@@ -16,7 +16,7 @@
     </div>
     <div class="chatButtons">
         <div class="buttondiv">
-            <button mat-flat-button color="Disabled" onClick="window.location.reload();">Neuer Chat</button>
+            <button mat-flat-button color="Disabled" (click)="newThread()">Neuer Chat</button>
         </div>
         <div class="buttondiv">
             <button mat-flat-button color="Disabled" [disabled]="buttonDisabled">Visueller Chatbot (Beta)</button>
