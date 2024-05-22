@@ -1,4 +1,5 @@
-import { Component, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Input, Output, ViewChild } from '@angular/core';
+import { ChatComponent } from '../chat.component';
 
 @Component({
   selector: 'app-message',
@@ -8,7 +9,7 @@ import { Component, Input, Output } from '@angular/core';
 export class MessageComponent {
   @Input() BoU: boolean; // Bot = True, User = False
   @Input() messageArray: string[];
-
+  
   message: string = '';
   currentWordIndex: number = 0;
 

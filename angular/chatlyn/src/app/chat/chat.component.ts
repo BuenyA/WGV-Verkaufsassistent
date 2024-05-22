@@ -1,4 +1,4 @@
-import { Component, ComponentRef, ElementRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewInit, Component, ComponentRef, ElementRef, ViewChild, ViewContainerRef } from '@angular/core';
 import { MessageComponent } from './message/message.component';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
