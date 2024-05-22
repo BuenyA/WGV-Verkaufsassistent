@@ -16,6 +16,8 @@ import { FooterComponent } from './footer/footer.component';
 import { ChatComponent } from './chat/chat.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { MessageComponent } from './chat/message/message.component';
+import { VisualBotComponent } from './visual-bot/visual-bot.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { MessageComponent } from './chat/message/message.component';
     HeaderComponent,
     FooterComponent,
     ChatComponent,
-    MessageComponent
+    MessageComponent,
+    VisualBotComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,

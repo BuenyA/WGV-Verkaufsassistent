@@ -1,0 +1,37 @@
+.notFound {
+    height: 100vh;
+    display: grid;
+    align-items: center;
+    justify-content: center;
+
+    .notFoundArea {
+        display: grid;
+        align-items: center;
+        justify-content: center;
+        min-height: 10vh;
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 7vh;
+            padding-bottom: 0.4em;
+            margin-top: 0.3em;
+        }
+
+        h2 {
+            font-size: 4vh;
+            font-weight: 300;
+            padding-bottom: 0.4em;
+            letter-spacing: 0.1em;
+        }
+
+        button {
+            width: 12vw;
+            justify-self: center;
+            background-color: #008F94;
+            color: white;
+        }
+    }
+}
