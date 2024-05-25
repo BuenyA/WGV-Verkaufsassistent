@@ -71,18 +71,6 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
             });
         });
 
-        messageResults = await new Promise((resolve, reject) => {
-            connection.query("SELECT MESSAGE FROM `PROTOKOLL` WHERE THREAD_ID = '" + threadResults[0]['THREAD_ID'] + "' ORDER BY timestamp DESC LIMIT 1", function (error, results, fields) {
-                if (error) {
-                    return reject(error);
-                } else {
-                    console.log("SECOND SELECT");
-                }
-                resolve(results);
-                console.log(results);
-            });
-        });
-
         connection.query("INSERT INTO `PROTOKOLL` (`THREAD_ID`, `USER`, `MESSAGE`) VALUES ('" + threadResults[0]['THREAD_ID'] + "', 'USER', '" + userMessage + "')", function (error, results, fields) {
             if (error) {
                 console.error(error);
@@ -91,30 +79,22 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
             }
         });
 
-        if (messageResults.length > 0) {
-            offer = utils_identify_intestion.identifyIntesionChatbot(messageResults[0]['MESSAGE'], userMessage);
-            console.log("Ein Datensatz");
-        } else {
-            offer = utils_identify_intestion.identifyIntesionUser(userMessage);
-            console.log("Kein Datensatz");
-        }
-
-        console.log(offer);
-
-        console.log("checkOffer");
-
-        if(offer == true) {
-            sleep(1000);
-            gptAnswer = ["Supi"];
-        } else {
-            gptAnswer = await openai.requestGPT(userMessage, threadResults[0]['THREAD_ID']);
-        }
+        gptAnswer = await openai.requestGPT(userMessage, threadResults[0]['THREAD_ID']);
 
         console.log(gptAnswer);
         
         gptAnswerString = gptAnswer.join("");
         
         console.log(gptAnswerString);
+
+        offer = utils_identify_intestion.searchInitiationWord(gptAnswerString);
+
+        console.log(offer);
+        
+        if(offer[0] == true) {
+            sleep(1000);
+            gptAnswer = ["Initialisierung", offer[1]];
+        }    
 
         connection.query("INSERT INTO `PROTOKOLL` (`THREAD_ID`, `USER`, `MESSAGE`) VALUES ('" + threadResults[0]['THREAD_ID'] + "', 'CHATBOT', '" + gptAnswerString + "')", function (error, results, fields) {
             if (error) {

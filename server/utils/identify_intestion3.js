@@ -41,8 +41,10 @@ function checkSimilarly(text, keywords) {
     
     const fuse = new Fuse(keywords, options);
 
-    const tokens = doc.terms().out('array');
-    console.log('Tokens:', tokens);
+    let tokens = doc.terms().out('array');
+    tokens = tokens.filter(token => !stopWords.includes(token)); // Entfernen der Stoppwörter
+    console.log('Filtered Tokens:', tokens);
+
     for (const token of tokens) {
         const result = fuse.search(token);
         console.log('Token:', token, 'Result:', result);
@@ -84,5 +86,3 @@ module.exports = {
         return checkSimilarly(text, keywords);
     }
 }
-
-console.log(identifyIntesionChatbot("Super, das freut mich! Gibt es ein bestimmtes Versicherungsprodukt, das dich besonders interessiert? Wir haben tolle Angebote für Kfz-, Haftpflicht-, Hausrat- und viele weitere Versicherungen.", "Ja Kfz interessiert mich"))
