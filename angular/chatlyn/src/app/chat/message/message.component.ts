@@ -21,7 +21,7 @@ export class MessageComponent {
     if (this.currentWordIndex < this.messageArray.length) {
       this.message += '' + this.messageArray[this.currentWordIndex];
       this.currentWordIndex++;
-      setTimeout(() => this.streamMessage(), 50);
+      setTimeout(() => this.streamMessage(), 30);
     }
   }
 }

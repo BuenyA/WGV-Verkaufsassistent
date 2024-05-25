@@ -114,6 +114,18 @@ function whichProduct(message) {
     return keywords[counter - 1];
 }
 
+function searchInitiationWord(message) {
+    let index = message.indexOf("Start Angebot");
+
+    if(index !== -1) {
+        substring = message.substring(index + 14);
+        keyword = substring.substring(0, substring.indexOf(":"));
+        return [true, whichProduct(keyword)];
+    } else {
+        return [false, ""];
+    }
+}
+
 module.exports = {
     searchInitiationWord: function searchInitiationWord(message) {
         let index = message.indexOf("Start Angebot");
@@ -127,3 +139,5 @@ module.exports = {
         }
     }
 }
+
+console.log(searchInitiationWord("Alles klar, hier geht’s los: Start Angebot Moped Versicherung! Um dir das beste Angebot zu machen, brauche ich aber noch ein paar Details. Welches Modell fährst du und wie alt bist du? So können wir sicherstellen, dass die Versicherung perfekt zu dir passt."));

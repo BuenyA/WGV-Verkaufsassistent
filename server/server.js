@@ -5,8 +5,6 @@ const cors = require('cors');
 const mysql = require('mysql');
 
 const utils = require("./utils/utils.js")
-const utils_identify_intestion = require("./utils/identify_intestion.js")
-// const openai = require("./neuronal_network/openai.js")
 const openai = require("./neuronal_models/openai/openaiAssistant.js")
 
 var dbInfo = {
@@ -57,6 +55,7 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
         var gptAnswer = [];
         var gptAnswerString = "";
         var offer = false;
+        var manualChatbot = false;
 
         console.log("user > " + userMessage);
 
@@ -71,6 +70,18 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
             });
         });
 
+        messageResults = await new Promise((resolve, reject) => {
+            connection.query("SELECT USER, PRODUCT FROM `PROTOKOLL` WHERE THREAD_ID = '" + threadResults[0]['THREAD_ID'] + "' ORDER BY timestamp DESC LIMIT 1", function (error, results, fields) {
+                if (error) {
+                    return reject(error);
+                } else {
+                    console.log("SECOND SELECT");
+                }
+                resolve(results);
+                console.log(results);
+            });
+        });
+
         connection.query("INSERT INTO `PROTOKOLL` (`THREAD_ID`, `USER`, `MESSAGE`) VALUES ('" + threadResults[0]['THREAD_ID'] + "', 'USER', '" + userMessage + "')", function (error, results, fields) {
             if (error) {
                 console.error(error);
@@ -79,30 +90,50 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
             }
         });
 
-        gptAnswer = await openai.requestGPT(userMessage, threadResults[0]['THREAD_ID']);
-
-        console.log(gptAnswer);
-        
-        gptAnswerString = gptAnswer.join("");
-        
-        console.log(gptAnswerString);
-
-        offer = utils_identify_intestion.searchInitiationWord(gptAnswerString);
-
-        console.log(offer);
-        
-        if(offer[0] == true) {
-            sleep(1000);
-            gptAnswer = ["Initialisierung", offer[1]];
-        }    
-
-        connection.query("INSERT INTO `PROTOKOLL` (`THREAD_ID`, `USER`, `MESSAGE`) VALUES ('" + threadResults[0]['THREAD_ID'] + "', 'CHATBOT', '" + gptAnswerString + "')", function (error, results, fields) {
-            if (error) {
-                console.error(error);
-            } else {
-                console.log('Success answer: ', results);
+        if (messageResults.length > 0) {
+            if (messageResults[0]['USER'] === "MANUAL_CHATBOT") {
+                await sleep(1000);
+                gptAnswer = utils.manualChatbot(messageResults[0]['PRODUCT']);
+                gptAnswerString = gptAnswer.join("");
+                connection.query("INSERT INTO `PROTOKOLL` (`THREAD_ID`, `USER`, `MESSAGE`, `PRODUCT`) VALUES ('" + threadResults[0]['THREAD_ID'] + "', 'MANUAL_CHATBOT', '" + gptAnswerString + "', '" + messageResults[0]['PRODUCT'] + "')", function (error, results, fields) {
+                    if (error) {
+                        console.error(error);
+                    } else {
+                        console.log('Success answer: ', results);
+                    }
+                });
+                manualChatbot = true;
             }
-        });
+        }
+
+        if (!manualChatbot) {
+            gptAnswer = await openai.requestGPT(userMessage, threadResults[0]['THREAD_ID']);
+            console.log(gptAnswer);
+            gptAnswerString = gptAnswer.join("");
+            console.log(gptAnswerString);
+            offer = utils.searchInitiationWord(gptAnswerString);
+            console.log(offer);
+            
+            if(offer[0] == true) {
+                gptAnswer = utils.manualChatbot(offer[1]);
+                gptAnswerString = gptAnswer.join("");
+                connection.query("INSERT INTO `PROTOKOLL` (`THREAD_ID`, `USER`, `MESSAGE`, `PRODUCT`) VALUES ('" + threadResults[0]['THREAD_ID'] + "', 'MANUAL_CHATBOT', '" + gptAnswerString + "', '" + offer[1] + "')", function (error, results, fields) {
+                    if (error) {
+                        console.error(error);
+                    } else {
+                        console.log('Success answer: ', results);
+                    }
+                });
+            } else {
+                connection.query("INSERT INTO `PROTOKOLL` (`THREAD_ID`, `USER`, `MESSAGE`) VALUES ('" + threadResults[0]['THREAD_ID'] + "', 'CHATBOT', '" + gptAnswerString + "')", function (error, results, fields) {
+                    if (error) {
+                        console.error(error);
+                    } else {
+                        console.log('Success answer: ', results);
+                    }
+                });
+            }
+        }
 
         res.status(200).json({ botMessage: gptAnswer });
     } catch (error) {
