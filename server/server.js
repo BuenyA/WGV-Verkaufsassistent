@@ -1,16 +1,14 @@
 'use strict';
 
-// Import Libraries
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql');
 
-// Import Subprocesses
 const utils = require("./utils/utils.js")
+const utils_identify_intestion = require("./utils/identify_intestion.js")
 // const openai = require("./neuronal_network/openai.js")
 const openai = require("./neuronal_models/openai/openaiAssistant.js")
 
-// Database connection info (MariaDB) - used from environment variables
 var dbInfo = {
     connectionLimit: 10,
     host: process.env.MYSQL_HOSTNAME,
@@ -33,14 +31,11 @@ connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
     }
 });
 
-// Constants for the server connection
 const PORT = process.env.PORT || 8080;
 const HOST = '0.0.0.0';
 
-// App
 const app = express();
 
-// Features for JSON Body
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -58,6 +53,10 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
     try {
         var userMessage = req.body.userMessage;
         var threadResults;
+        var messageResults;
+        var gptAnswer = [];
+        var gptAnswerString = "";
+        var offer = false;
 
         console.log("user > " + userMessage);
 
@@ -65,14 +64,65 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
             connection.query("SELECT * FROM `THREADS` ORDER BY timestamp DESC LIMIT 1", function (error, results, fields) {
                 if (error) {
                     return reject(error);
+                } else {
+                    console.log("FIRST SELECT");
                 }
                 resolve(results);
             });
         });
 
-        var gptAnswer = await openai.requestGPT(userMessage, threadResults[0]['THREAD_ID']);
-        
+        messageResults = await new Promise((resolve, reject) => {
+            connection.query("SELECT MESSAGE FROM `PROTOKOLL` WHERE THREAD_ID = '" + threadResults[0]['THREAD_ID'] + "' ORDER BY timestamp DESC LIMIT 1", function (error, results, fields) {
+                if (error) {
+                    return reject(error);
+                } else {
+                    console.log("SECOND SELECT");
+                }
+                resolve(results);
+                console.log(results);
+            });
+        });
+
+        connection.query("INSERT INTO `PROTOKOLL` (`THREAD_ID`, `USER`, `MESSAGE`) VALUES ('" + threadResults[0]['THREAD_ID'] + "', 'USER', '" + userMessage + "')", function (error, results, fields) {
+            if (error) {
+                console.error(error);
+            } else {
+                console.log("FIRST INSERT");
+            }
+        });
+
+        if (messageResults.length > 0) {
+            offer = utils_identify_intestion.identifyIntesionChatbot(messageResults[0]['MESSAGE'], userMessage);
+            console.log("Ein Datensatz");
+        } else {
+            offer = utils_identify_intestion.identifyIntesionUser(userMessage);
+            console.log("Kein Datensatz");
+        }
+
+        console.log(offer);
+
+        console.log("checkOffer");
+
+        if(offer == true) {
+            sleep(1000);
+            gptAnswer = ["Supi"];
+        } else {
+            gptAnswer = await openai.requestGPT(userMessage, threadResults[0]['THREAD_ID']);
+        }
+
         console.log(gptAnswer);
+        
+        gptAnswerString = gptAnswer.join("");
+        
+        console.log(gptAnswerString);
+
+        connection.query("INSERT INTO `PROTOKOLL` (`THREAD_ID`, `USER`, `MESSAGE`) VALUES ('" + threadResults[0]['THREAD_ID'] + "', 'CHATBOT', '" + gptAnswerString + "')", function (error, results, fields) {
+            if (error) {
+                console.error(error);
+            } else {
+                console.log('Success answer: ', results);
+            }
+        });
 
         res.status(200).json({ botMessage: gptAnswer });
     } catch (error) {
