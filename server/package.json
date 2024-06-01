@@ -16,6 +16,7 @@
     "fuse.js": "^7.0.0",
     "mysql": "^2.18.1",
     "openai": "^4.47.1",
+    "pdf-lib": "^1.17.1",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

@@ -22,7 +22,7 @@ console.log("Conecting to database...");
 connection.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
     if (error) throw error;
     if (results[0].solution == 2) {
-        console.log("Database connected and works");
+        console.log("Database connected and works with server.js");
     } else {
         console.error("There is something wrong with your database connection! Please check");
         process.exit(5)
@@ -92,17 +92,19 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
 
         if (messageResults.length > 0) {
             if (messageResults[0]['USER'] === "MANUAL_CHATBOT") {
-                await sleep(1000);
-                gptAnswer = utils.manualChatbot(messageResults[0]['PRODUCT']);
-                gptAnswerString = gptAnswer.join("");
-                connection.query("INSERT INTO `PROTOKOLL` (`THREAD_ID`, `USER`, `MESSAGE`, `PRODUCT`) VALUES ('" + threadResults[0]['THREAD_ID'] + "', 'MANUAL_CHATBOT', '" + gptAnswerString + "', '" + messageResults[0]['PRODUCT'] + "')", function (error, results, fields) {
-                    if (error) {
-                        console.error(error);
-                    } else {
-                        console.log('Success answer: ', results);
-                    }
-                });
-                manualChatbot = true;
+                if (messageResults[0]['PRODUCT'] === "moped") {
+                    await sleep(1000);
+                    gptAnswer = await utils.manualChatbot(messageResults[0]['PRODUCT'], threadResults[0]['THREAD_ID'], false, userMessage);
+                    gptAnswerString = gptAnswer.join("");
+                    connection.query("INSERT INTO `PROTOKOLL` (`THREAD_ID`, `USER`, `MESSAGE`, `PRODUCT`) VALUES ('" + threadResults[0]['THREAD_ID'] + "', 'MANUAL_CHATBOT', '" + gptAnswerString + "', '" + messageResults[0]['PRODUCT'] + "')", function (error, results, fields) {
+                        if (error) {
+                            console.error(error);
+                        } else {
+                            console.log('Success answer: ', results);
+                        }
+                    });
+                    manualChatbot = true;
+                }
             }
         }
 
@@ -115,8 +117,10 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
             console.log(offer);
             
             if(offer[0] == true) {
-                gptAnswer = utils.manualChatbot(offer[1]);
+                gptAnswer = await utils.manualChatbot(offer[1], threadResults[0]['THREAD_ID'], true);
+                console.log(gptAnswer); 
                 gptAnswerString = gptAnswer.join("");
+
                 connection.query("INSERT INTO `PROTOKOLL` (`THREAD_ID`, `USER`, `MESSAGE`, `PRODUCT`) VALUES ('" + threadResults[0]['THREAD_ID'] + "', 'MANUAL_CHATBOT', '" + gptAnswerString + "', '" + offer[1] + "')", function (error, results, fields) {
                     if (error) {
                         console.error(error);

@@ -6,7 +6,7 @@ module.exports = {
         return utils_identify_intestion.searchInitiationWord(message);
     },
 
-    manualChatbot: function manualChatbot(message) {
-        return utils_manualChatbot.manualChatbot(message);
+    manualChatbot: function manualChatbot(insuranceProduct, thread_id, firstInteraction, userMessage) {
+        return utils_manualChatbot.manualChatbot(insuranceProduct, thread_id, firstInteraction, userMessage);
     }
 }

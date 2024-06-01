@@ -5,8 +5,11 @@ function getKeywords(counter) {
     if(counter === 0) {
         return keywords = [
             "kfz",
+            "kfzversicherung",
             "auto",
+            "autoversicherung",
             "kraftfahrzeug",
+            "kraftfahrzeugversicherung",
             "wagen",
             "karre",
             "schlitten",
@@ -19,54 +22,69 @@ function getKeywords(counter) {
     } else if(counter === 1) {
         return keywords = [
             "moped",
+            "mopedversicherung",
             "roller",
+            "rollerversicherung",
             "mofa",
+            "mofaversicherung",
             "zweirad",
             "mopped",
+            "moppedversicherung",
             "zweitakter"
         ];
     } else if(counter === 2) {
         return keywords = [
-            "youngdriver"
+            "youngdriver",
+            "youngdriverversicherung",
         ];
     } else if(counter === 3) {
         return keywords = [
             "hausrat",
+            "hausratversicherung",
             "glas"
         ];
     } else if(counter === 4) {
         return keywords = [
             "wohngebäude",
+            "wohngebäudeversicherung",
             "gebäude"
         ];
     } else if(counter === 5) {
         return keywords = [
             "privathaftplicht",
+            "privathaftplichtversicherung",
             "haftplicht",
+            "haftplichtversicherung",
             "bauleistungsversicherung",
             "bauherrenhaftpflichtversicherung",
-            "diensthaftplicht"
+            "diensthaftplicht",
+            "diensthaftplichtversicherung"
         ];
     } else if(counter === 6) {
         return keywords = [
             "cyber",
+            "cyberversicherung",
             "hacker",
-            "cracker"
+            "hackerversicherung",
+            "cracker",
+            "crackerversicherung"
         ];
     } else if(counter === 7) {
         return keywords = [
             "rechtsschutz",
-            "abschließen",
-            "berechnen"
+            "rechtsschutzversicherung"
         ];
     } else if(counter === 8) {
         return keywords = [
             "zahn",
-            "zähne"
+            "zahnversicherung",
+            "zähne",
+            "zähneversicherung"
         ];
     } else if(counter === 9) {
         return keywords = [
-            "rente"
+            "rente",
+            "rentenversicherung"
         ];
     } else {
         return keywords = [
@@ -101,7 +119,7 @@ function whichProduct(message) {
 
     var productFound = false;
     var counter = 0;
-    const keywords = ["kfz", "moped", "youngdriver", "hausrat", "wohngebäude", "haftpflicht", "cyber", "rechtsschutz", "zahn", "rente"]
+    const keywords = ["kfz", "moped", "youngdriver", "hausrat", "wohngebäude", "haftpflicht", "cyber", "rechtsschutz", "zahn", "rente"];
 
     while(!productFound) {
         productFound = checkSimilarly(message, getKeywords(counter));
@@ -111,6 +129,8 @@ function whichProduct(message) {
         }
     }
 
+    // console.log(counter - 1);
+
     return keywords[counter - 1];
 }
 
@@ -119,7 +139,17 @@ function searchInitiationWord(message) {
 
     if(index !== -1) {
         substring = message.substring(index + 14);
-        keyword = substring.substring(0, substring.indexOf(":"));
+        console.log(substring.indexOf("-"));
+        if (substring.indexOf("-") !== -1) {
+            if (substring.indexOf(":") < substring.indexOf("-")) {
+                keyword = substring.substring(0, substring.indexOf(":"));
+            } else {
+                keyword = substring.substring(0, substring.indexOf("-"));
+            }
+        } else {
+            keyword = substring.substring(0, substring.indexOf(":"));
+        }
+        console.log(keyword);
         return [true, whichProduct(keyword)];
     } else {
         return [false, ""];
@@ -132,7 +162,17 @@ module.exports = {
 
         if(index !== -1) {
             substring = message.substring(index + 14);
-            keyword = substring.substring(0, substring.indexOf(":"));
+            // console.log(substring.indexOf("-"));
+            if (substring.indexOf("-") !== -1) {
+                if (substring.indexOf(":") < substring.indexOf("-")) {
+                    keyword = substring.substring(0, substring.indexOf(":"));
+                } else {
+                    keyword = substring.substring(0, substring.indexOf("-"));
+                }
+            } else {
+                keyword = substring.substring(0, substring.indexOf(":"));
+            }
+            // console.log(keyword);
             return [true, whichProduct(keyword)];
         } else {
             return [false, ""];
@@ -140,4 +180,4 @@ module.exports = {
     }
 }
 
-console.log(searchInitiationWord("Alles klar, hier geht’s los: Start Angebot Moped Versicherung! Um dir das beste Angebot zu machen, brauche ich aber noch ein paar Details. Welches Modell fährst du und wie alt bist du? So können wir sicherstellen, dass die Versicherung perfekt zu dir passt."));
+// console.log(searchInitiationWord("Klar, das mache ich gerne für dich! **Start Angebot Moped-Versicherung:** Unsere Moped-Versicherung bietet dir umfassenden Schutz zu einem günstigen Preis. Du profitierst von einem ausgezeichneten Haftpflichtschutz und kannst optional auch eine Teilkaskoversicherung mit Zusatzschutz für"));

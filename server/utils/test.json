@@ -1,0 +1,14 @@
+{
+    "customer": {
+      "name": "Max Mustermann",
+      "address": "Tübinger Str. 59, 70178 Stuttgart"
+    },
+    "policy": {
+      "number": "V123456789",
+      "type": "Vertragsänderung",
+      "start_date": "01.01.20xx",
+      "end_date": "31.12.20xx",
+      "details": "Privathaftpflichtversicherung für Familien und Paare (OPTIMAL-Tarif)",
+      "special_agreement": "Jahresbeitrag für einmal gezahlt. gesetzliche Versicherungsteuer: 0,00 EUR"
+    }
+}  

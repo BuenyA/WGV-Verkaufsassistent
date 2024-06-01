@@ -1,25 +1,33 @@
-import { AfterViewInit, Component, ComponentRef, ElementRef, ViewChild, ViewContainerRef } from '@angular/core';
+import { AfterViewChecked, AfterViewInit, Component, ComponentRef, ElementRef, OnInit, ViewChild, ViewContainerRef } from '@angular/core';
 import { MessageComponent } from './message/message.component';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
+import { ChatService } from '../services/chat.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-chat',
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'
 })
-export class ChatComponent {
+export class ChatComponent implements OnInit {
 
   defaultMessage1: string[] = ["Hallo! Ich bin Ihr persönlicher Verkaufsassistent!"];
   defaultMessage2: string[] = ["Wie kann ich Ihnen heute weiterhelfen?"];
   buttonDisabled: boolean = true;
-
-  constructor(public http: HttpClient) {}
-
+  private subscription: Subscription;
+  
   @ViewChild('containerRef', { read: ViewContainerRef }) container!: ViewContainerRef;
   componentRef!: ComponentRef<MessageComponent>;
   
   @ViewChild('chatArea') private chatArea: ElementRef;
+  
+  constructor(public http: HttpClient, private chatService: ChatService) {}
+
+  ngOnInit() {
+    this.subscription = this.chatService.callFunction$.subscribe(() => {
+      this.scrollToBottom(false);
+    });
+  }
 
   sendMessage(inputElement: HTMLInputElement) {
     const message = inputElement.value;
@@ -27,7 +35,7 @@ export class ChatComponent {
       this.componentRef = this.container.createComponent(MessageComponent);
       this.componentRef.instance.messageArray = [message];
       inputElement.value = '';
-      this.scrollToBottom();
+      this.scrollToBottom(false);
       if(message == "Code: 300") {
         setTimeout(() => this.unlockButton(), 1000);
       } else if (message == "Code: 301") {
@@ -63,12 +71,21 @@ export class ChatComponent {
     // this.componentRef.instance.message = dynamicBotMessage;
     this.componentRef.instance.messageArray = dynamicBotMessage;
     this.componentRef.instance.BoU = true;
-    this.scrollToBottom();
+    this.scrollToBottom(false);
   }
 
-  scrollToBottom() {
+  scrollToBottom(fast: boolean) {
     const element = this.chatArea.nativeElement;
-    setTimeout(() => element.scrollTop = element.scrollHeight, 100);
+
+    if (fast) {
+      element.style.scrollBehavior = "auto";
+      element.scrollTop = element.scrollHeight;
+    } else {
+      element.style.scrollBehavior = "smooth";
+      setTimeout(() => {
+        element.scrollTop = element.scrollHeight;
+      }, 100);
+    }
   }
 
   newThread() {
