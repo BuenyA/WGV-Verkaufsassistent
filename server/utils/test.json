@@ -1,14 +1,16 @@
 {
     "customer": {
+      "geschlecht": "Herr",
       "name": "Max Mustermann",
-      "address": "Tübinger Str. 59, 70178 Stuttgart"
+      "staße": "Tübinger Str. 59",
+      "stadt": "70178 Stuttgart"
     },
     "policy": {
       "number": "V123456789",
-      "type": "Vertragsänderung",
-      "start_date": "01.01.20xx",
-      "end_date": "31.12.20xx",
+      "type": "Neuvertrag",
+      "start_date": "01.06.2024",
+      "end_date": "31.12.2999",
       "details": "Privathaftpflichtversicherung für Familien und Paare (OPTIMAL-Tarif)",
-      "special_agreement": "Jahresbeitrag für einmal gezahlt. gesetzliche Versicherungsteuer: 0,00 EUR"
+      "modell": "Aprilia SR 50 R"
     }
-}  
+} 

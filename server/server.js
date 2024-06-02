@@ -3,6 +3,7 @@
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql');
+const path = require('path');
 
 const utils = require("./utils/utils.js")
 const openai = require("./neuronal_models/openai/openaiAssistant.js")
@@ -94,9 +95,14 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
             if (messageResults[0]['USER'] === "MANUAL_CHATBOT") {
                 if (messageResults[0]['PRODUCT'] === "moped") {
                     await sleep(1000);
+                    var chatbotType = "MANUAL_CHATBOT";
                     gptAnswer = await utils.manualChatbot(messageResults[0]['PRODUCT'], threadResults[0]['THREAD_ID'], false, userMessage);
-                    gptAnswerString = gptAnswer.join("");
-                    connection.query("INSERT INTO `PROTOKOLL` (`THREAD_ID`, `USER`, `MESSAGE`, `PRODUCT`) VALUES ('" + threadResults[0]['THREAD_ID'] + "', 'MANUAL_CHATBOT', '" + gptAnswerString + "', '" + messageResults[0]['PRODUCT'] + "')", function (error, results, fields) {
+                    gptAnswerString = gptAnswer[0].join("");
+                    if (gptAnswer[1] === true) {
+                        chatbotType = "CHATBOT";
+                    }
+                    gptAnswer = gptAnswer[0];
+                    connection.query("INSERT INTO `PROTOKOLL` (`THREAD_ID`, `USER`, `MESSAGE`, `PRODUCT`) VALUES ('" + threadResults[0]['THREAD_ID'] + "', '" + chatbotType + "', '" + gptAnswerString + "', '" + messageResults[0]['PRODUCT'] + "')", function (error, results, fields) {
                         if (error) {
                             console.error(error);
                         } else {
@@ -118,8 +124,9 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
             
             if(offer[0] == true) {
                 gptAnswer = await utils.manualChatbot(offer[1], threadResults[0]['THREAD_ID'], true);
-                console.log(gptAnswer); 
-                gptAnswerString = gptAnswer.join("");
+                // console.log(gptAnswer[0]); 
+                gptAnswerString = gptAnswer[0].join("");
+                gptAnswer = gptAnswer[0];
 
                 connection.query("INSERT INTO `PROTOKOLL` (`THREAD_ID`, `USER`, `MESSAGE`, `PRODUCT`) VALUES ('" + threadResults[0]['THREAD_ID'] + "', 'MANUAL_CHATBOT', '" + gptAnswerString + "', '" + offer[1] + "')", function (error, results, fields) {
                     if (error) {
@@ -138,6 +145,12 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
                 });
             }
         }
+
+        // const filePath = path.join('/usr/src/app/utils/policies/', 'InsurancePolicy1717253648553.pdf');
+
+        // console.log(filePath);
+
+        // res.sendFile(filePath);
 
         res.status(200).json({ botMessage: gptAnswer });
     } catch (error) {

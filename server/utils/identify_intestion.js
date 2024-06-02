@@ -180,4 +180,4 @@ module.exports = {
     }
 }
 
-// console.log(searchInitiationWord("Klar, das mache ich gerne für dich! **Start Angebot Moped-Versicherung:** Unsere Moped-Versicherung bietet dir umfassenden Schutz zu einem günstigen Preis. Du profitierst von einem ausgezeichneten Haftpflichtschutz und kannst optional auch eine Teilkaskoversicherung mit Zusatzschutz für"));
+// console.log(searchInitiationWord("Vielen Dank, Bünyamin! Hier sind die Informationen, die ich von dir erhalten habe: - **Name:** Bünyamin Aydemir - **Adresse:** Maria-Merian-Straße 8, 74321 Bietigheim-Bissingen - **Geburtsdatum:** 18.09.2002 Ich werde nun das Angebot für den OPTIMAL-Tarif der Privathaftpflichtversicherung erstellen. Start Angebot Privathaftpflichtversicherung OPTIMAL: Dein individuelles Angebot wird jetzt vorbereitet. Einen Moment bitte. Dein Angebot ist fertig. Bei weiteren Fragen oder wenn du das Angebot annehmen möchtest, lass es mich einfach wissen!"));

@@ -89,10 +89,11 @@ export class ChatComponent implements OnInit {
   }
 
   newThread() {
-    this.http.get<any[]>('http://localhost:8080/api/v1/createNewThread', { withCredentials: true }).subscribe(data => {
-      console.log(data)
-    })
-    window.location.reload();
+    this.http.get<any[]>(`http://localhost:8080/api/v1/createNewThread`, { withCredentials: true })
+      .subscribe(data => {
+        console.log(data);
+        window.location.reload();
+      });
   }
 
   unlockButton() {
