@@ -4,6 +4,7 @@ const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql');
 const path = require('path');
+const fs = require('fs');
 
 const utils = require("./utils/utils.js")
 const openai = require("./neuronal_models/openai/openaiAssistant.js")
@@ -49,17 +50,19 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 app.post('/api/v1/getBotMessage', async (req, res) => {
+    
+    var userMessage = req.body.userMessage;
+    var threadResults;
+    var messageResults;
+    var pdf = "";
+    var gptAnswer = [];
+    var gptAnswerString = "";
+    var offer = false;
+    var manualChatbot = false;
+
+    console.log("user > " + userMessage);
+
     try {
-        var userMessage = req.body.userMessage;
-        var threadResults;
-        var messageResults;
-        var gptAnswer = [];
-        var gptAnswerString = "";
-        var offer = false;
-        var manualChatbot = false;
-
-        console.log("user > " + userMessage);
-
         threadResults = await new Promise((resolve, reject) => {
             connection.query("SELECT * FROM `THREADS` ORDER BY timestamp DESC LIMIT 1", function (error, results, fields) {
                 if (error) {
@@ -72,7 +75,7 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
         });
 
         messageResults = await new Promise((resolve, reject) => {
-            connection.query("SELECT USER, PRODUCT FROM `PROTOKOLL` WHERE THREAD_ID = '" + threadResults[0]['THREAD_ID'] + "' ORDER BY timestamp DESC LIMIT 1", function (error, results, fields) {
+            connection.query("SELECT USER, PRODUCT FROM `PROTOKOLL` WHERE THREAD_ID = '" + threadResults[0]['THREAD_ID'] + "' AND USER != 'USER' ORDER BY timestamp DESC LIMIT 1", function (error, results, fields) {
                 if (error) {
                     return reject(error);
                 } else {
@@ -100,6 +103,15 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
                     gptAnswerString = gptAnswer[0].join("");
                     if (gptAnswer[1] === true) {
                         chatbotType = "CHATBOT";
+                        /* fs.readFile(path.join(__dirname, 'utils', 'policies', 'InsurancePolicy.pdf'), { encoding: 'base64' }, (err, data) => {
+                            if (err) {
+                                console.error('Error reading PDF file:', err);
+                                res.status(500).json({ error: 'Error reading PDF file' });
+                                return;
+                            }
+                            pdf = data;
+                            // res.status(200).json({ botMessage: gptAnswer, file: pdf });
+                        }); */
                     }
                     gptAnswer = gptAnswer[0];
                     connection.query("INSERT INTO `PROTOKOLL` (`THREAD_ID`, `USER`, `MESSAGE`, `PRODUCT`) VALUES ('" + threadResults[0]['THREAD_ID'] + "', '" + chatbotType + "', '" + gptAnswerString + "', '" + messageResults[0]['PRODUCT'] + "')", function (error, results, fields) {
@@ -146,13 +158,18 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
             }
         }
 
-        // const filePath = path.join('/usr/src/app/utils/policies/', 'InsurancePolicy1717253648553.pdf');
+        /* fs.readFile(path.join(__dirname, 'utils', 'policies', 'InsurancePolicy.pdf'), { encoding: 'base64' }, (err, data) => {
+            if (err) {
+                console.error('Error reading PDF file:', err);
+                res.status(500).json({ error: 'Error reading PDF file' });
+                return;
+            }
+            pdf = data;
+            res.status(200).json({ botMessage: gptAnswer, file: pdf });
+        }); */
 
-        // console.log(filePath);
-
-        // res.sendFile(filePath);
-
-        res.status(200).json({ botMessage: gptAnswer });
+        res.status(200).json({ botMessage: gptAnswer, file: pdf });
+        // res.status(200).json({ botMessage: gptAnswer });
     } catch (error) {
         console.error("Error in processing request: ", error);
         res.status(500).json({ error: 'Something went wrong' });

@@ -4,8 +4,8 @@ import json
 CHUNK_SIZE = 1024
 XI_API_KEY = "fc877bad5856f9a45002b9d42458eda2"
 VOICE_ID = "iP95p4xoKVk53GoZ742B"
-TEXT_TO_SPEAK = "Bei uns bekommst du nämlich immer ein top Preis-Leistungs-Verhältnis und maßgeschneiderte Lösungen, die genau auf deine Bedürfnisse abgestimmt sind. Außerdem sind wir stolz auf unseren erstklassigen Kundenservice, der dir jederzeit mit Rat und Tat zur Seite steht."  # Text you want to convert to speech
-OUTPUT_PATH = "C:/Users/aydem\Documents/Chatlyn_local/server/neuronal_network/tts_elevenlabs/output.mp3"
+TEXT_TO_SPEAK = "Jo jo Alter. Alles fit im Schritt?"  # Text you want to convert to speech
+OUTPUT_PATH = "C:/Users/aydem/Documents/Chatlyn_local/server/neuronal_network/tts_elevenlabs/output3.mp3"
 
 tts_url = f"https://api.elevenlabs.io/v1/text-to-speech/{VOICE_ID}/stream"
 

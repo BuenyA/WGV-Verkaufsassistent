@@ -1,16 +1,13 @@
 {
-    "customer": {
-      "geschlecht": "Herr",
-      "name": "Max Mustermann",
-      "staße": "Tübinger Str. 59",
-      "stadt": "70178 Stuttgart"
-    },
-    "policy": {
-      "number": "V123456789",
-      "type": "Neuvertrag",
-      "start_date": "01.06.2024",
-      "end_date": "31.12.2999",
-      "details": "Privathaftpflichtversicherung für Familien und Paare (OPTIMAL-Tarif)",
-      "modell": "Aprilia SR 50 R"
-    }
-} 
+  "geschlecht": "Heaaaarr",
+  "vorname": "Bünyamin",
+  "nachname": "Aydemir",
+  "modell": "Aprilia SR 50 R",
+  "neuwert": 5000,
+  "kasko": "Vollkasko",
+  "alter": 21,
+  "plz": 74321,
+  "stadt": "Bietigheim-Bissingen",
+  "straße": "Maria Straße",
+  "hausnummer": 8
+}

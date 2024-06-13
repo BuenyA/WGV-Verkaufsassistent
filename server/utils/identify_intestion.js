@@ -104,10 +104,10 @@ function checkSimilarly(message, keywords) {
     const fuse = new Fuse(keywords, options);
 
     const tokens = doc.terms().out('array');
-    // console.log('Tokens:', tokens);
+    console.log('Tokens:', tokens);
     for (const token of tokens) {
         const result = fuse.search(token);
-        // console.log('Token:', token, 'Result:', result);
+        console.log('Token:', token, 'Result:', result);
         if (result.length > 0 && result[0].score <= 0.2) {
             return true;
         }
@@ -119,6 +119,7 @@ function whichProduct(message) {
 
     var productFound = false;
     var counter = 0;
+    message = message.replace(" ", "");
     const keywords = ["kfz", "moped", "youngdriver", "hausrat", "wohngebäude", "haftpflicht", "cyber", "rechtsschutz", "zahn", "rente"];
 
     while(!productFound) {
@@ -172,7 +173,7 @@ module.exports = {
             } else {
                 keyword = substring.substring(0, substring.indexOf(":"));
             }
-            // console.log(keyword);
+            console.log(keyword);
             return [true, whichProduct(keyword)];
         } else {
             return [false, ""];
@@ -180,4 +181,4 @@ module.exports = {
     }
 }
 
-// console.log(searchInitiationWord("Vielen Dank, Bünyamin! Hier sind die Informationen, die ich von dir erhalten habe: - **Name:** Bünyamin Aydemir - **Adresse:** Maria-Merian-Straße 8, 74321 Bietigheim-Bissingen - **Geburtsdatum:** 18.09.2002 Ich werde nun das Angebot für den OPTIMAL-Tarif der Privathaftpflichtversicherung erstellen. Start Angebot Privathaftpflichtversicherung OPTIMAL: Dein individuelles Angebot wird jetzt vorbereitet. Einen Moment bitte. Dein Angebot ist fertig. Bei weiteren Fragen oder wenn du das Angebot annehmen möchtest, lass es mich einfach wissen!"));
+// console.log(searchInitiationWord("file_search Gerne! Die Moped-Versicherung der WGV bietet dir umfassenden Schutz zu einem fairen Preis. Der Versicherungsschutz beginnt, sobald du den fälligen Beitrag vollständig und rechtzeitig gezahlt hast. Er deckt dich geographisch innerhalb Europas und den außereuropäischen Gebieten, die zur EU gehören. Wichtig ist, dass der Vertrag jährlich ohne Kündigung mit dem Ablauf des Verkehrsjahres endet, das vom 1. März bis Ende Februar des Folgejahres läuft【4:0†source】. Möchtest du ein spezielles Angebot für die Moped-Versicherung? Dann können wir direkt starten! Start Angebot Moped."));

@@ -2,15 +2,16 @@ const openai = require("../neuronal_models/openai/openaiAssistant.js");
 const createPolice = require("./createPolicy.js");
 
 async function intialMoped(thread_id) {
-    return [await openai.requestGPT("Im Folgenden werden die Angaben des Benutzers ermitellt. Diese müssen sein: 'Vorname', 'Nachname', 'Adresse', 'Marke und Modell des Rollers', 'Vollkasko oder Teilkasko' 'Neuwert des Rollers' und 'Alter des jüngsten Fahrers'. Sollte der Benutzer einer der Attribute vergessen, dann fordere ihn auf, die fehlenden Daten nach und nach einzugeben. Überprüfe außerdem, ob die eingebenen Daten realistisch sein können. Falls nicht, fordere den Benutzer auf, die Eingabe zu korrigieren. Sobald du alle Daten hast, gibst du sie als ein JSON-Dokument mit folgenden Attribunamen heraus: 'geschlecht', 'vorname', 'nachname', 'modell', 'neuwert', 'kasko', 'alter', 'plz', 'stadt' und 'straße'.", thread_id), false];
+    return [await openai.requestGPT("Im Folgenden werden Schritt für Schritt die Angaben des Benutzers ermitellt. Diese müssen sein: 'Vorname', 'Nachname', 'Adresse', 'Marke und Modell des Rollers', 'Vollkasko oder Teilkasko' 'Neuwert des Rollers' und 'Alter des jüngsten Fahrers'. Sollte der Benutzer einer der Attribute vergessen, dann fordere ihn auf, die fehlenden Daten nach und nach einzugeben. Überprüfe außerdem, ob die eingebenen Daten realistisch sein können. Falls nicht, fordere den Benutzer auf, die Eingabe zu korrigieren. Sobald du alle Daten hast, gibst du sie als ein JSON-Dokument mit folgenden Attribunamen heraus: 'geschlecht', 'vorname', 'nachname', 'modell', 'neuwert', 'kasko', 'alter', 'plz', 'stadt', 'straße' und 'hausnummer'.", thread_id), false];
 }
 
 async function mopedMain(thread_id, userMessage) {
     const gptAnswer = await openai.requestGPT(userMessage, thread_id);
     const gptAnswerString = gptAnswer.join("");
+    // const gptAnswerString = '{"geschlecht": "männlich", "vorname": "Anus", "nachname": "Aydemir", "modell": "Aprilia SR 50 Ra", "neuwert": 5000, "kasko": "Teilkasko", "alter": 21, "plz": 74321, "stadt": "Bietigheim-Bissingen", "straße": "Maria Straße"}';
     if(gptAnswerString.indexOf("{") !== -1) {
         var json = JSON.parse(gptAnswerString.substring(gptAnswerString.indexOf("{"), gptAnswerString.indexOf("}") + 1));
-        
+        createPolice.createInsurancePolicy(json);
         return [await openai.requestGPT("Der Benutzer hat nun eine Versicherungspolice zum Download für seine Moped-Versicherung erhalten. Das kann aber ein paar Sekunden dauern.", thread_id), true];
     } else {
         return [gptAnswer, false];
@@ -33,3 +34,5 @@ module.exports = {
         }
     }
 }
+
+// mopedMain('thread_WRCsTL3MeY6EYpCG2nNTetoj', '{"geschlecht": "männlich", "vorname": "Anus", "nachname": "Aydemir", "modell": "Aprilia SR 50 R", "neuwert": 5000, "kasko": "Vollkasko", "alter": 21, "plz": 74321, "stadt": "Bietigheim-Bissingen", "straße": "Maria Straße"}');
