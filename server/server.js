@@ -55,6 +55,7 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
     var threadResults;
     var messageResults;
     var pdf = "";
+    var sendPdf = false;
     var gptAnswer = [];
     var gptAnswerString = "";
     var offer = false;
@@ -103,15 +104,7 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
                     gptAnswerString = gptAnswer[0].join("");
                     if (gptAnswer[1] === true) {
                         chatbotType = "CHATBOT";
-                        /* fs.readFile(path.join(__dirname, 'utils', 'policies', 'InsurancePolicy.pdf'), { encoding: 'base64' }, (err, data) => {
-                            if (err) {
-                                console.error('Error reading PDF file:', err);
-                                res.status(500).json({ error: 'Error reading PDF file' });
-                                return;
-                            }
-                            pdf = data;
-                            // res.status(200).json({ botMessage: gptAnswer, file: pdf });
-                        }); */
+                        sendPdf = true;
                     }
                     gptAnswer = gptAnswer[0];
                     connection.query("INSERT INTO `PROTOKOLL` (`THREAD_ID`, `USER`, `MESSAGE`, `PRODUCT`) VALUES ('" + threadResults[0]['THREAD_ID'] + "', '" + chatbotType + "', '" + gptAnswerString + "', '" + messageResults[0]['PRODUCT'] + "')", function (error, results, fields) {
@@ -158,18 +151,19 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
             }
         }
 
-        /* fs.readFile(path.join(__dirname, 'utils', 'policies', 'InsurancePolicy.pdf'), { encoding: 'base64' }, (err, data) => {
-            if (err) {
-                console.error('Error reading PDF file:', err);
-                res.status(500).json({ error: 'Error reading PDF file' });
-                return;
-            }
-            pdf = data;
+        if(sendPdf) {
+            fs.readFile(path.join(__dirname, 'utils', 'policies', 'InsurancePolicy.pdf'), { encoding: 'base64' }, (err, data) => {
+                if (err) {
+                    console.error('Error reading PDF file:', err);
+                    res.status(500).json({ error: 'Error reading PDF file' });
+                    return;
+                }
+                pdf = data;
+                res.status(200).json({ botMessage: gptAnswer, file: pdf });
+            });
+        } else {
             res.status(200).json({ botMessage: gptAnswer, file: pdf });
-        }); */
-
-        res.status(200).json({ botMessage: gptAnswer, file: pdf });
-        // res.status(200).json({ botMessage: gptAnswer });
+        }
     } catch (error) {
         console.error("Error in processing request: ", error);
         res.status(500).json({ error: 'Something went wrong' });

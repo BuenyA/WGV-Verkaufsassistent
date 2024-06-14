@@ -44,7 +44,7 @@ module.exports = {
         page.drawText('70178 Stuttgart', { x: 450, y: 625, size: 8, font });
         
         page.drawText("Herr", { x: 50, y: 640, size: 11, font }); // Adjusted position
-        page.drawText(geschlecht, { x: 50, y: 640, size: 11, font }); // Adjusted position
+        // page.drawText(geschlecht, { x: 50, y: 640, size: 11, font }); // Adjusted position
         page.drawText(vorname + " " + nachname, { x: 50, y: 625, size: 11, font }); // Adjusted position
         page.drawText(straße + " " + hausnummer, { x: 50, y: 610, size: 11, font }); // Adjusted position
         page.drawText(plz + " " + stadt, { x: 50, y: 595, size: 11, font }); // Adjusted position
@@ -99,9 +99,8 @@ module.exports = {
         const pdfBytes = await pdfDoc.save();
 
         const fileName = 'InsurancePolicy' + String(date.getTime()) + '.pdf'
-        // const fileName = 'InsurancePolicy.pdf'
 
-        fs.writeFileSync('/usr/src/app/utils/policies' + fileName, pdfBytes);
+        fs.writeFileSync('/usr/src/app/utils/policies/' + fileName, pdfBytes);
 
         return fileName;
     }
