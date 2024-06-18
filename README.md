@@ -1,4 +1,4 @@
-# ChatLYN - LLM Chatbot for WGV Insurance
+# LLM Chatbot for WGV Insurance
 
 ## Overview
 
