@@ -97,11 +97,12 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
 
         if (messageResults.length > 0) {
             if (messageResults[0]['USER'] === "MANUAL_CHATBOT") {
-                if (messageResults[0]['PRODUCT'] === "moped") {
+                if (messageResults[0]['PRODUCT'] === "moped" || messageResults[0]['PRODUCT'] === "haftpflicht") {
                     await sleep(1000);
                     var chatbotType = "MANUAL_CHATBOT";
                     gptAnswer = await utils.manualChatbot(messageResults[0]['PRODUCT'], threadResults[0]['THREAD_ID'], false, userMessage);
                     gptAnswerString = gptAnswer[0].join("");
+                    console.log("Was soll das" + gptAnswer[1]);
                     if (gptAnswer[1] === true) {
                         chatbotType = "CHATBOT";
                         sendPdf = true;
@@ -115,6 +116,7 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
                         }
                     });
                     manualChatbot = true;
+                    console.log("True Manual_Chatbot");
                 }
             }
         }

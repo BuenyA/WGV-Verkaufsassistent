@@ -11,7 +11,7 @@ module.exports = {
         const pdfDoc = await PDFDocument.create();
         const page = pdfDoc.addPage([595, 842]);
 
-        const { geschlecht, vorname, nachname, modell, neuwert, kasko, alter, plz, stadt, straße, hausnummer } = json;
+        const { geschlecht, vorname, nachname, plz, stadt, straße, hausnummer, tarif } = json;
 
         const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
         const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
@@ -49,7 +49,7 @@ module.exports = {
         page.drawText(straße + " " + hausnummer, { x: 50, y: 610, size: 11, font }); // Adjusted position
         page.drawText(plz + " " + stadt, { x: 50, y: 595, size: 11, font }); // Adjusted position
 
-        page.drawText('Versicherungsschein zur Mopedversicherung', { x: 50, y: 520, size: 16, font: boldFont, color: rgb(0, 0, 0) });
+        page.drawText('Versicherungsschein zur Haftpflichtversicherung', { x: 50, y: 520, size: 16, font: boldFont, color: rgb(0, 0, 0) });
 
         page.drawText('Mitglieds-/Kundennummer:', { x: 50, y: 500, size: fontSize, font: boldFont });
         page.drawText('P123456789', { x: 200, y: 500, size: fontSize, font: boldFont }); // Dummy value for customer number
@@ -79,10 +79,10 @@ module.exports = {
         page.drawText('Versicherungsschutz ausgeschlossen. Die Mitversicherung erlischt, wenn die häusliche Gemeinschaft', { x: 50, y: 270, size: fontSize, font });
         page.drawText('der Partner aufgelöst wird. Dies ist uns unverzüglich anzuzeigen.', { x: 50, y: 255, size: fontSize, font });
 
-        page.drawText('Versichertes Kraftfahrzeug:', { x: 50, y: 225, size: fontSize, font: boldFont });
-        page.drawText(modell, { x: 50, y: 210, size: fontSize, font });
+        page.drawText('Tarifauswahl:', { x: 50, y: 225, size: fontSize, font: boldFont });
+        page.drawText(tarif, { x: 50, y: 210, size: fontSize, font });
         
-        page.drawText('Jahresbeitrag für die Mopedversicherung (Kasko: ' + kasko + '):                                                                67,30 EUR', { x: 50, y: 165, size: fontSize, font });
+        page.drawText('Jahresbeitrag für die Haftpflichtversicherung (Tarif: ' + tarif + '):                                                                67,30 EUR', { x: 50, y: 165, size: fontSize, font });
         page.drawText('Umsatzsteuer                                                                                                                                           12,79 EUR', { x: 50, y: 150, size: fontSize, font });
         
         page.drawLine({
@@ -94,11 +94,11 @@ module.exports = {
 
         page.drawText('Insgesamte Jahresprämie                                                                                                                        80,09 EUR', { x: 50, y: 125, size: fontSize, font });
 
-        page.drawText("Stuttgart, der " + today, { x: 50, y: 60, size: fontSize, font }); // Example date
+        page.drawText("Stuttgart, der " + today, { x: 50, y: 60, size: fontSize, font });
 
         const pdfBytes = await pdfDoc.save();
 
-        const fileName = 'InsurancePolicy' + String(date.getTime()) + '.pdf'
+        const fileName = 'InsurancePolicyHaftplicht' + String(date.getTime()) + '.pdf'
 
         fs.writeFileSync('/usr/src/app/utils/policies/' + fileName, pdfBytes);
 
