@@ -6,7 +6,7 @@ services:
       - "8080:8080"
     restart: always
     environment:
-      MYSQL_DATABASE: chatlyndb
+      MYSQL_DATABASE: salesassistentdb
       MYSQL_USER: chatlynuser
       MYSQL_PASSWORD: chatlynpass
       MYSQL_HOSTNAME: maria_db
@@ -25,9 +25,10 @@ services:
     build: db
     restart: always
     environment:
-      MYSQL_DATABASE: chatlyndb
+      MYSQL_DATABASE: salesassistentdb
       MYSQL_USER: chatlynuser
       MYSQL_PASSWORD: chatlynpass
+      MYSQL_ROOT_PASSWORD: root
       MYSQL_RANDOM_ROOT_PASSWORD: chatlynpassroot
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
