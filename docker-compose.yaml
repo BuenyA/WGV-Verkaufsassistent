@@ -36,3 +36,12 @@ services:
       - 8085:80
     environment:
       PMA_HOST: maria_db
+  # angular: # The name of the service
+  #   container_name: angular  # Container name
+  #   build: 
+  #     context: angular
+  #     dockerfile: Dockerfile
+  #   ports: 
+  #     - '80:80' # Port mapping
+  #   volumes:
+  #     - ./angular:/src/usr/app
