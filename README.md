@@ -1,4 +1,4 @@
-# ChatLYN - LLM Chatbot for WGV Insurance
+# LLM Chatbot for WGV Insurance
 
 ## Overview
 
@@ -65,4 +65,4 @@ ChatLYN is a project aimed at developing a chatbot using GPT-4.0 for WGV Insuran
 1. Run the Angular application:
     ng serve
 
-2. Access the chatbot via your web browser at http://localhost:4200
+2. Access the chatbot via your web browser at http://localhost:80
