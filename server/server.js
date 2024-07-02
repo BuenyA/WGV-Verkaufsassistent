@@ -3,8 +3,6 @@
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql');
-const path = require('path');
-const fs = require('fs');
 
 const utils = require("./utils/utils.js")
 const openai = require("./neuronal_models/openai/openaiAssistant.js")
@@ -128,7 +126,7 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
             
             if(offer[0] == true) {
                 gptAnswer = await utils.manualChatbot(offer[1], threadResults[0]['THREAD_ID'], true);
-                // console.log(gptAnswer[0]); 
+                // console.log(gptAnswer[0]);
                 gptAnswerString = gptAnswer[0].join("");
                 gptAnswer = gptAnswer[0];
 
@@ -150,11 +148,21 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
             }
         }
 
-        if(gptAnswer.indexOf("file_search") !== -1) {
+        if(gptAnswer.indexOf("\nfile_search\n\n") !== -1) {
+            gptAnswer[gptAnswer.indexOf("\nfile_search\n\n")] = "";
+            console.log("Ja diggi, kein file_search");
+        } else {
+            /* let positions = array
+                .map((element, index) => ({ elementIndex: index, charIndex: element.indexOf('【') }))
+                .filter(position => position.charIndex !== -1); */
+            console.log("Ne diggi, kein file_search");
+        }
+
+/*         if(gptAnswer.indexOf("file_search") !== -1) {
             console.log("Jajaja, file_search")
         } else {
             console.log("Ne diggi, kein file_search")
-        }
+        } */
 
         res.status(200).json({ botMessage: gptAnswer });
     } catch (error) {
