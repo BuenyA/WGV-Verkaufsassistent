@@ -54,8 +54,6 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
     var userMessage = req.body.userMessage;
     var threadResults;
     var messageResults;
-    var pdf = "";
-    var sendPdf = false;
     var gptAnswer = [];
     var gptAnswerString = "";
     var offer = false;
@@ -105,7 +103,6 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
                     console.log("Was soll das" + gptAnswer[1]);
                     if (gptAnswer[1] === true) {
                         chatbotType = "CHATBOT";
-                        sendPdf = true;
                     }
                     gptAnswer = gptAnswer[0];
                     connection.query("INSERT INTO `PROTOKOLL` (`THREAD_ID`, `USER`, `MESSAGE`, `PRODUCT`) VALUES ('" + threadResults[0]['THREAD_ID'] + "', '" + chatbotType + "', '" + gptAnswerString + "', '" + messageResults[0]['PRODUCT'] + "')", function (error, results, fields) {
@@ -153,19 +150,13 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
             }
         }
 
-        if(sendPdf) {
-            fs.readFile(path.join(__dirname, 'utils', 'policies', 'InsurancePolicy.pdf'), { encoding: 'base64' }, (err, data) => {
-                if (err) {
-                    console.error('Error reading PDF file:', err);
-                    res.status(500).json({ error: 'Error reading PDF file' });
-                    return;
-                }
-                pdf = data;
-                res.status(200).json({ botMessage: gptAnswer, file: pdf });
-            });
+        if(gptAnswer.indexOf("file_search") !== -1) {
+            console.log("Jajaja, file_search")
         } else {
-            res.status(200).json({ botMessage: gptAnswer, file: pdf });
+            console.log("Ne diggi, kein file_search")
         }
+
+        res.status(200).json({ botMessage: gptAnswer });
     } catch (error) {
         console.error("Error in processing request: ", error);
         res.status(500).json({ error: 'Something went wrong' });

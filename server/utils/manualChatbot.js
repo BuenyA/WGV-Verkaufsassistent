@@ -38,7 +38,7 @@ async function haftpflichtMain(thread_id, userMessage) {
 
 async function otherPlans(thread_id) {
     await openai.requestGPT("Bedauerlicherweise kann die WGV-Versicherung gerade kein Angebot für dieses Versicherungsprodukt machen. Antworte somit im Folgenden immer damit, dass auf dieses Versicherungsprodukt keine Angebote herausgegeben werden dürfen oder Versicherungen abgeschlossen werden dürfen.", thread_id);
-    return ["Bedauerlicherweise! kann! ich! aktuell! noch! keine! Angebote! für! diese! Versicherungsprodukte! herausgeben.! Allerdings! helfen! Ihnen! sehr! gerne! einer! meiner! menschlichen! Kollegne! weiter.! Dafür! kannst! du! die! einfache! eine! E-Mail! an! die! www.wgv.de! oder! gleich! ein! Anruf! über! die! 0177! 1695-1500! tätigen.".split("!"), false];
+    return ["Bedauerlicherweise! kann! ich! aktuell! noch! keine! Angebote! für! diese! Versicherungsprodukte! herausgeben.! Allerdings! helfen! Ihnen! sehr! gerne! einer! meiner! menschlichen! Kollegne! weiter.! Dafür! kannst! du! einfach! eine! E-Mail! an! die! www.wgv.de! schicken! oder! gleich! einen! Anruf! über! die! 0177! 1695-1500! tätigen.".split("!"), false];
 }
 
 module.exports = {
