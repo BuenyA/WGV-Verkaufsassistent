@@ -14,6 +14,8 @@ let positions = array
     .map((element, index) => ({ elementIndex: index, charIndex: element.indexOf('【') }))
     .filter(position => position.charIndex !== -1);
 
+console.log(positions.length)
+console.log(positions[0]['elementIndex'])
 console.log(positions);
 
 // console.log(array.indexOf('file_search'));

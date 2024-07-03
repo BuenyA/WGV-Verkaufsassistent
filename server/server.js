@@ -152,10 +152,21 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
             gptAnswer[gptAnswer.indexOf("\nfile_search\n\n")] = "";
             console.log("Ja diggi, kein file_search");
         } else {
-            /* let positions = array
-                .map((element, index) => ({ elementIndex: index, charIndex: element.indexOf('【') }))
-                .filter(position => position.charIndex !== -1); */
             console.log("Ne diggi, kein file_search");
+        }
+
+        let positions = gptAnswer
+                .map((element, index) => ({ elementIndex: index, charIndex: element.indexOf('【') }))
+                .filter(position => position.charIndex !== -1);
+
+        if(positions.length > 0) {
+            console.log("Ja, is da!!!!!!!!!!!!!!!!!!!!!!!11")
+            positions.forEach(element => {
+                console.log(element);
+                console.log(element['elementIndex']);
+                gptAnswer[element['elementIndex']] = "";
+                console.log(gptAnswer);
+            });
         }
 
 /*         if(gptAnswer.indexOf("file_search") !== -1) {
