@@ -150,9 +150,6 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
 
         if(gptAnswer.indexOf("\nfile_search\n\n") !== -1) {
             gptAnswer[gptAnswer.indexOf("\nfile_search\n\n")] = "";
-            console.log("Ja diggi, kein file_search");
-        } else {
-            console.log("Ne diggi, kein file_search");
         }
 
         let positions = gptAnswer
@@ -160,7 +157,6 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
                 .filter(position => position.charIndex !== -1);
 
         if(positions.length > 0) {
-            console.log("Ja, is da!!!!!!!!!!!!!!!!!!!!!!!11")
             positions.forEach(element => {
                 console.log(element);
                 console.log(element['elementIndex']);
@@ -168,12 +164,6 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
                 console.log(gptAnswer);
             });
         }
-
-/*         if(gptAnswer.indexOf("file_search") !== -1) {
-            console.log("Jajaja, file_search")
-        } else {
-            console.log("Ne diggi, kein file_search")
-        } */
 
         res.status(200).json({ botMessage: gptAnswer });
     } catch (error) {
