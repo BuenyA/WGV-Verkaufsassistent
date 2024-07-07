@@ -45,6 +45,6 @@ ng serve
 > In diesem Verzeichnis befindet sich die Anwendungslogik des Backends
 
 ## Lizenz
-Copyright © 2024 DHBW-Stuttgart und WGV-Versicherung
+Copyright © 2024 DHBW-Stuttgart und WGV-Informatik und Media GmbH
 
 Dieses Programm wurde im Rahmen einer wissenschaftlichen Arbeit in Kooperation zwischen der DHBW Stuttgart und der WGV-Versicherung entwickelt. Beide Parteien behalten sich die Verwertungsrechte vor.
