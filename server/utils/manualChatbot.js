@@ -17,7 +17,7 @@ async function mopedMain(thread_id, userMessage) {
     if(gptAnswerString.indexOf("{") !== -1) {
         var json = JSON.parse(gptAnswerString.substring(gptAnswerString.indexOf("{"), gptAnswerString.indexOf("}") + 1));
         createPoliceMoped.createInsurancePolicy(json);
-        return [await openai.requestGPT("Der Benutzer hat nun eine Versicherungspolice zum Download für seine Moped-Versicherung erhalten. Das kann aber ein paar Sekunden dauern.", thread_id), true];
+        return [await openai.requestGPT("Die Informationen werden nun von einem Sacharbeiter der WGV-Versicherung nochmal überprüft. Das kann ein paar Tage dauern. Bei erfolgreicher Validierung, wird die Police via Post zugesendet. Erkläre das kurz dem Benutzer und biete ihm Hilfe bei weiteren Anliegen an.", thread_id), true];
     } else {
         return [gptAnswer, false];
     }
@@ -38,7 +38,7 @@ async function haftpflichtMain(thread_id, userMessage) {
 
 async function otherPlans(thread_id) {
     await openai.requestGPT("Bedauerlicherweise kann die WGV-Versicherung gerade kein Angebot für dieses Versicherungsprodukt machen. Antworte somit im Folgenden immer damit, dass auf dieses Versicherungsprodukt keine Angebote herausgegeben werden dürfen oder Versicherungen abgeschlossen werden dürfen.", thread_id);
-    return ["Bedauerlicherweise! kann! ich! aktuell! noch! keine! Angebote! für! diese! Versicherungsprodukte! herausgeben.! Allerdings! helfen! Ihnen! sehr! gerne! einer! meiner! menschlichen! Kollegne! weiter.! Dafür! kannst! du! einfach! eine! E-Mail! an! die! www.wgv.de! schicken! oder! gleich! einen! Anruf! über! die! 0177! 1695-1500! tätigen.".split("!"), false];
+    return ["Bedauerlicherweise! kann! ich! aktuell! noch! keine! Angebote! für! diese! Versicherungsprodukte! herausgeben.! Allerdings! helfen! Ihnen! sehr! gerne! einer! meiner! menschlichen! Kollegen! weiter.! Dafür! kannst! du! einfach! eine! E-Mail! an! die! www.wgv.de! schicken! oder! gleich! einen! Anruf! über! die! 0177! 1695-1500! tätigen.".split("!"), false];
 }
 
 module.exports = {

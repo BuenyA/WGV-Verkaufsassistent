@@ -7,6 +7,8 @@ const mysql = require('mysql');
 const utils = require("./utils/utils.js")
 const openai = require("./neuronal_models/openai/openaiAssistant.js")
 
+const consolelog = true;
+
 var dbInfo = {
     connectionLimit: 10,
     host: process.env.MYSQL_HOSTNAME,
@@ -57,7 +59,9 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
     var offer = false;
     var manualChatbot = false;
 
-    console.log("user > " + userMessage);
+    if(consolelog) {
+        console.log("user > " + userMessage);
+    }
 
     try {
         threadResults = await new Promise((resolve, reject) => {
@@ -65,7 +69,9 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
                 if (error) {
                     return reject(error);
                 } else {
-                    console.log("FIRST SELECT");
+                    if(consolelog) {
+                        console.log("FIRST SELECT");
+                    }
                 }
                 resolve(results);
             });
@@ -76,10 +82,14 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
                 if (error) {
                     return reject(error);
                 } else {
-                    console.log("SECOND SELECT");
+                    if(consolelog) {
+                        console.log("SECOND SELECT");
+                    }
                 }
                 resolve(results);
-                console.log(results);
+                if(consolelog) {
+                    console.log(results);
+                }
             });
         });
 
@@ -87,7 +97,9 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
             if (error) {
                 console.error(error);
             } else {
-                console.log("FIRST INSERT");
+                if(consolelog) {
+                    console.log("FIRST INSERT");
+                }
             }
         });
 
@@ -98,7 +110,6 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
                     var chatbotType = "MANUAL_CHATBOT";
                     gptAnswer = await utils.manualChatbot(messageResults[0]['PRODUCT'], threadResults[0]['THREAD_ID'], false, userMessage);
                     gptAnswerString = gptAnswer[0].join("");
-                    console.log("Was soll das" + gptAnswer[1]);
                     if (gptAnswer[1] === true) {
                         chatbotType = "CHATBOT";
                     }
@@ -107,26 +118,35 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
                         if (error) {
                             console.error(error);
                         } else {
-                            console.log('Success answer: ', results);
+                            if(consolelog) {
+                                console.log('Success answer: ', results);
+                            }
                         }
                     });
                     manualChatbot = true;
-                    console.log("True Manual_Chatbot");
+                    if(consolelog) {
+                        console.log("True Manual_Chatbot");
+                    }
                 }
             }
         }
 
         if (!manualChatbot) {
             gptAnswer = await openai.requestGPT(userMessage, threadResults[0]['THREAD_ID']);
-            console.log(gptAnswer);
+            if(consolelog) {
+                console.log(gptAnswer);
+            }
             gptAnswerString = gptAnswer.join("");
-            console.log(gptAnswerString);
+            if(consolelog) {
+                console.log(gptAnswerString);
+            }
             offer = utils.searchInitiationWord(gptAnswerString);
-            console.log(offer);
+            if(consolelog) {
+                console.log(offer);
+            }
             
             if(offer[0] == true) {
                 gptAnswer = await utils.manualChatbot(offer[1], threadResults[0]['THREAD_ID'], true);
-                // console.log(gptAnswer[0]);
                 gptAnswerString = gptAnswer[0].join("");
                 gptAnswer = gptAnswer[0];
 
@@ -134,7 +154,9 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
                     if (error) {
                         console.error(error);
                     } else {
-                        console.log('Success answer: ', results);
+                        if(consolelog) {
+                            console.log('Success answer: ', results);
+                        }
                     }
                 });
             } else {
@@ -142,7 +164,9 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
                     if (error) {
                         console.error(error);
                     } else {
-                        console.log('Success answer: ', results);
+                        if(consolelog) {
+                            console.log('Success answer: ', results);
+                        }
                     }
                 });
             }
@@ -158,10 +182,7 @@ app.post('/api/v1/getBotMessage', async (req, res) => {
 
         if(positions.length > 0) {
             positions.forEach(element => {
-                console.log(element);
-                console.log(element['elementIndex']);
                 gptAnswer[element['elementIndex']] = "";
-                console.log(gptAnswer);
             });
         }
 
