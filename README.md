@@ -1,68 +1,50 @@
-# LLM Chatbot for WGV Insurance
+# Prototypischer LLM-Chatbot als Verkaufsassistent für die WGV-Versicherung
+Das Ziel dieses Projekts ist die prototypische Implementierung eines LLM-Chatbots als Verkaufsassistenten für die WGV-Versicherung. Dieser soll zur Informationsvermittlung und zum Vertrieb der Versicherungsprodukte des Unternehmens dienen.
 
-## Overview
+## Requirements
+Die Installation der Anwendung setzt die Installation von Docker voraus. Des Weiteren muss `NodeJS` und die dazugehörigen Libraries installiert werden. Außerdem setzt die Nutzung des Chatbots eine stabile Internetverbindung voraus.
 
-ChatLYN is a project aimed at developing a chatbot using GPT-4.0 for WGV Insurance. The chatbot serves as a sales assistant, helping customers with their insurance needs by providing information and guiding them through the sales process.
+## Installationsanleitung
+Repository klonen
+~~~
+git clone https://github.com/BuenyA/WGV-Verkaufsassistent
+~~~
+Navigation in Zielordner
+~~~
+cd WGV-Verkaufsassistent
+~~~
+Docker-Container aufsetzen
+~~~
+docker-compose up -d
+~~~
+Installation und Ausführung der Angular-Applikation
+~~~zsh
+cd angular
 
-## Features
+# Installation Libraries
+npm install
 
-- **Intelligent Conversations**: Leverages GPT-4.0 to provide human-like responses and assist customers with their queries.
-- **PDF Creator**: Generates PDFs based on customer interactions and data.
-- **API Integration**: Connects to various APIs to retrieve and update customer information.
-- **Dataset Management**: Utilizes a dataset specifically tailored for WGV Insurance to improve the chatbot's performance.
+# Start der Angular-Anwendung
+ng serve
+~~~
 
-## Project Structure
+## Repository Struktur
+### Angular
+> Dieses Verzeichnis beinhaltet die Anwendungslogik des Frontends
 
-├── angular/chatlyn
-│ └── PDF Creator Success
-├── dataset/WGV_Broschüren
-│ └── Dataset for Chatbot 2.0
-├── db
-│ └── Initial Commit
-├── server
-│ └── Vorfinal (PDF download fehlt noch)
-├── .dockerignore
-│ └── Initial Commit
-├── README.md
-│ └── Initial Commit
-└── docker-compose.yaml
-└── API Connection to default GPT
+### Dataset
+> In diesem Verzeichnis sind die Broschüren und Vertragsbedingungen für das LLM gesammelt
 
+### DB
+> Dieses Verzeichnis beinhaltet die relationale Datebank des Backends
 
-### Directories
+### Documentation
+> In diesem Verzeichnis befinden sich beispielhafte Aufzeichnung des LLM-Chatbots
 
-- **angular/chatlyn**: Contains the front-end code for the chatbot, built with Angular.
-- **dataset/WGV_Broschüren**: Contains datasets used to train and improve the chatbot.
-- **db**: Database files and configurations.
-- **server**: Server-side code and API implementations.
+### Server
+> In diesem Verzeichnis befindet sich die Anwendungslogik des Backends
 
-## Getting Started
+## Lizenz
+Copyright © 2024 DHBW-Stuttgart und WGV-Informatik und Media GmbH
 
-### Prerequisites
-
-- Docker
-- Node.js
-- Angular CLI
-
-### Installation
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/BuenyA/ChatLYN.git
-
-2. Navigate to the project directory:
-    cd ChatLYN
-
-3. Install dependencies for the Angular app:
-    cd angular/chatlyn
-    npm install
-
-4. Start the Docker containers:
-    docker-compose up
-
-### Usage
-
-1. Run the Angular application:
-    ng serve
-
-2. Access the chatbot via your web browser at http://localhost:80
+Dieses Programm wurde im Rahmen einer wissenschaftlichen Arbeit in Kooperation zwischen der DHBW Stuttgart und der WGV-Versicherung entwickelt. Beide Parteien behalten sich die Verwertungsrechte vor.
