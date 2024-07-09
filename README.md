@@ -28,6 +28,8 @@ npm install
 ng serve
 ~~~
 
+Der WGV-Verkaufsassistent steht bei erfolgreicher Installation über den `localhost:4200` zur Verfügung.
+
 ## Repository Struktur
 ### Angular
 > Dieses Verzeichnis beinhaltet die Anwendungslogik des Frontends
