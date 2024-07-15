@@ -5,7 +5,7 @@ Das Ziel dieses Projekts ist die prototypische Implementierung eines LLM-Chatbot
 Die Installation der Anwendung setzt die Installation von Docker voraus. Des Weiteren muss `NodeJS` und die dazugehörigen Libraries installiert werden. Außerdem setzt die Nutzung des Chatbots eine stabile Internetverbindung voraus.
 
 ## Installationsanleitung
-Repository klonen
+Repository klonen (Das Repository ist nicht öffentlich! Die Benutzung bedarf einer Anfrage an den Creator: BuenyA)
 ~~~
 git clone https://github.com/BuenyA/WGV-Verkaufsassistent
 ~~~
